@@ -4,5 +4,5 @@ import java.io.InputStream;
 
 public interface Loader<T> {
 
-    public InputStream load(T properties);
+    public InputStream load(T properties) throws Exception;
 }

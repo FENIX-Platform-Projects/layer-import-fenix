@@ -2,17 +2,18 @@ package org.fao.etl.layer.fenix;
 
 import org.fao.etl.layer.fenix.dto.BatchMode;
 import org.fao.etl.layer.fenix.services.Import;
-import org.fao.fenix.commons.utils.Properties;
+import org.fao.fenix.commons.msd.dto.full.MeIdentification;
 import org.jboss.weld.environment.se.bindings.Parameters;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Collection;
 
 @Singleton
 public class Startup {
-    private @Inject InitProperties initProperties;
     private @Inject Import importLogic;
 
     public void mainFlow(@Observes ContainerInitialized event, @Parameters String[] args) {
@@ -25,22 +26,27 @@ public class Startup {
             return;
         }
         //Execute command
-        switch (mode) {
-            case wmsUrl:
-                String url = args.length==2 ? args[1] : null;
-                if (url==null) {
-                    System.out.println("Specify one URL to use 'wmsUrl' mode.");
-                    return;
-                }
-                try {
-                    importLogic.importWmsByUrl(args[1], initProperties.getProperty("d3s.url"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                System.out.println("Command unsupported.");
+        Collection<MeIdentification> metadataList = null;
+        try {
+            switch (mode) {
+                case wmsUrl:
+                    metadataList = importLogic.importWmsByUrl(args.length>1 ? args[1] : null, args.length > 2 ? args[2] : null);
+                    break;
+                default:
+                    throw new Exception("Command unsupported.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        //Print result
+        if (metadataList==null)
+            System.out.println("Uploaded no metadata");
+        else {
+            System.out.println("Uploaded subsequent metadata instances:\n");
+            for (MeIdentification metadata : metadataList)
+                System.out.println("uid: "+metadata.getUid()+" - context: "+metadata.getDsd().getContextSystem());
+        }
+
     }
 
 

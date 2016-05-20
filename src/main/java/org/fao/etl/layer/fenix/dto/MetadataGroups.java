@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class MetadataGroups {
-    public Collection<MeIdentification<DSDDataset>> insert = new LinkedList<>();
-    public Collection<MeIdentification<DSDDataset>> update = new LinkedList<>();
-    public Collection<MeIdentification<DSDDataset>> delete = new LinkedList<>();
+    public Collection<MeIdentification> insert = new LinkedList<>();
+    public Collection<MeIdentification> update = new LinkedList<>();
+    public Collection<MeIdentification> delete = new LinkedList<>();
 }
