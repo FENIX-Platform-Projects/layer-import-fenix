@@ -5,7 +5,6 @@
     <groupId>org.fao</groupId>
     <artifactId>layer-import-fenix</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,13 +21,6 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <warName>layerimport</warName>
                 </configuration>
             </plugin>
             <plugin>
@@ -56,7 +48,6 @@
            <groupId>javax</groupId>
            <artifactId>javaee-api</artifactId>
            <version>7.0</version>
-           <scope>provided</scope>
        </dependency>
 
        <!-- Test -->

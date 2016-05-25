@@ -4,6 +4,7 @@ import org.fao.etl.layer.fenix.impl.decoder.wms.dto.Layer;
 import org.fao.etl.layer.fenix.impl.decoder.wms.dto.WMT_MS_Capabilities;
 import org.fao.fenix.commons.msd.dto.full.*;
 import org.fao.fenix.commons.msd.dto.type.DocumentType;
+import org.fao.fenix.commons.msd.dto.type.LayerType;
 import org.fao.fenix.commons.msd.dto.type.RepresentationType;
 import org.fao.fenix.commons.msd.dto.type.ResponsiblePartyRole;
 import org.fao.fenix.commons.utils.FileUtils;
@@ -31,10 +32,10 @@ public class WMSMetadataCreator {
         meContent.setKeywords(xml.KeywordList!=null && xml.KeywordList.Keyword!=null && xml.KeywordList.Keyword.size()>0 ? xml.KeywordList.Keyword : null);
         metadata.setMeContent(meContent);
 
+        MeSpatialRepresentation meSpatialRepresentation = new MeSpatialRepresentation();
+        meSpatialRepresentation.setLayerType(LayerType.raster); //TODO implement logic to identify layer type
+        metadata.setMeSpatialRepresentation(meSpatialRepresentation);
         if (xml.LatLonBoundingBox!=null) {
-            MeSpatialRepresentation meSpatialRepresentation = new MeSpatialRepresentation();
-            metadata.setMeSpatialRepresentation(meSpatialRepresentation);
-
             SeBoundingBox seBoundingBox = new SeBoundingBox();
             seBoundingBox.setXmin(xml.LatLonBoundingBox.minx);
             seBoundingBox.setYmin(xml.LatLonBoundingBox.miny);
@@ -86,6 +87,10 @@ public class WMSMetadataCreator {
             meContent.setDescription(toLabel(xml.Service.Abstract));
             meContent.setKeywords(xml.Service.KeywordList!=null && xml.Service.KeywordList.Keyword!=null && xml.Service.KeywordList.Keyword.size()>0 ? xml.Service.KeywordList.Keyword : null);
             metadata.setMeContent(meContent);
+
+            MeSpatialRepresentation meSpatialRepresentation = new MeSpatialRepresentation();
+            meSpatialRepresentation.setLayerType(LayerType.layergroup);
+            metadata.setMeSpatialRepresentation(meSpatialRepresentation);
 
             if (xml.Service.ContactInformation!=null)
                 try {
